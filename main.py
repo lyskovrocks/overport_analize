@@ -1,19 +1,22 @@
-from colorama import Fore
 from OverportAnalizer import OverportAnalizer
-import colorama
 
+# print(sheet.max_row)
+# print(sheet[1][i].value)
 
 overport = OverportAnalizer()
+# overport.show_tasks(50)
+print("Processing...")
 
-for row in range(2,8):
-    adress = overport.sheet[row][4].value
-    task = overport.sheet[row][5].value
-    status = overport.sheet[row][9].value
-    comment = overport.sheet[row][6].value
-    print(Fore.BLUE + status + Fore.RESET, adress, task,'\n' '         |||ОТВЕТ: ', Fore.YELLOW + str(comment) + Fore.RESET)
+# print(overport.sheet[32][4].value)
+
+# Считает кол-во заявок по ЖК.
+# count = 0
+# for task in range(1, 2000):
+#     if "Южное" in overport.sheet[task][overport.ADDRESS].value:
+#         count += 1
+#         #print(overport.sheet[task][4].value)
+# print("Заявок по ЖК София: ", count)
 
 
-    #print(sheet[row][i].value)
+overport.show_tasks(date_range_min='2023-05-01', date_range_max='2023-06-01')
 
-    # print(sheet.max_row)
-    # print(sheet[1][i].value)

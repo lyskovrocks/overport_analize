@@ -16,7 +16,6 @@ class OverportAnalizer:
     COMMENT = 6
 
     def __init__(self):
-
         self.wb: Workbook = openpyxl.load_workbook(self.PATH, read_only=False)
         self.wb.create_sheet('Without_Duplicates', 0)
         self.wb.save(self.PATH)

@@ -1,13 +1,15 @@
 from OverportAnalizer import OverportAnalizer
 
 # print(sheet.max_row)
-# print(sheet[1][i].value)
+
+
 
 overport = OverportAnalizer()
-# overport.show_tasks(50)
 print("Processing...")
 
-# print(overport.sheet[32][4].value)
+
+
+
 
 # Считает кол-во заявок по ЖК.
 # count = 0
@@ -16,7 +18,9 @@ print("Processing...")
 #         count += 1
 #         #print(overport.sheet[task][4].value)
 # print("Заявок по ЖК София: ", count)
+# stroka = 'Хэй, посмотри и попробуй найти тут ДуБль'
+# stroka = stroka.lower()
+# print(stroka.lower().find('дубль'))
 
 
-overport.show_tasks(date_range_min='2023-05-01', date_range_max='2023-06-01')
-
+# overport.show_tasks(100)

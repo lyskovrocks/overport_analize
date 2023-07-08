@@ -1,7 +1,3 @@
-from types import NoneType
-
-import input_data
-import shutil
 import openpyxl
 from colorama import Fore
 from openpyxl.workbook import Workbook

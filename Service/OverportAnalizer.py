@@ -34,7 +34,7 @@ class OverportAnalizer:
             else:
                 for word in regulars.DUPLICATES:
                     if str(self.sheet_origin[task][self.COMMENT].value).lower().find(word) == -1:
-                        self.sheet.append(self.sheet_origin.max_row)
+                        self.sheet.append(self.sheet_origin.iter_rows(min_row=task, max_row=task, values_only=True))
                         moved_row_count += 1
         self.wb.save(self.PATH)
         print(f'Удалено {self.sheet_origin.max_row - moved_row_count - 1} дублей')

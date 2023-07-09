@@ -1,15 +1,10 @@
-from OverportAnalizer import OverportAnalizer
+from Service.OverportAnalizer import OverportAnalizer
 
 # print(sheet.max_row)
 
 
-
 overport = OverportAnalizer()
 print("Processing...")
-
-
-
-
 
 # Считает кол-во заявок по ЖК.
 # count = 0

@@ -1,49 +1,68 @@
-from types import NoneType
+import logging
 
-import shutil
 import openpyxl
 from colorama import Fore
 from openpyxl.workbook import Workbook
 from openpyxl.worksheet.worksheet import Worksheet
 
-import regulars
+import Service.regulars as regulars
 
 
 class OverportAnalizer:
-    PATH = 'input_data/ads_journal.xlsx'
-
     DATE = 3
     ADDRESS = 4
     TASK = 5
     STATUS = 9
     COMMENT = 6
+    START_ROW = 2
+    ORIGINAL_SHEET_NAME = 'Лист 1'
+    NEW_SHEET_NAME = 'Without_Duplicates'
 
-    def __init__(self):
 
-        self.wb: Workbook = openpyxl.load_workbook(self.PATH, read_only=False)
-        self.wb.create_sheet('Without_Duplicates', 0)
-        self.wb.save(self.PATH)
+    def __init__(self, path = None):
+
+        if path is None:
+            raise AttributeError('Укажите имя файла в конструкторе')
+
+        self.wb: Workbook = openpyxl.load_workbook(path, read_only=False)
+
+        # self.wb.remove(self.NEW_SHEET_NAME)
+        self.wb.create_sheet(self.NEW_SHEET_NAME, 0)
+
+        self.wb.save(path)
+        self.path = path
         self.sheet: Worksheet = self.wb.active
-        self.sheet_origin: Worksheet = self.wb['Лист 1']
-        self.remove_duplicates()
+        self.sheet_origin: Worksheet = self.wb[self.ORIGINAL_SHEET_NAME]
+
 
     def remove_duplicates(self):
-        print('Removing duplicates...')
-        moved_row_count = 0
-        for task in range(2, 30):
-            if self.sheet_origin[task][self.COMMENT].value is None:
-                # self.sheet.append(self.sheet_origin.iter_rows(min_row=task, max_row=task, values_only=True))
+        logging.info('Removing duplicates...')
+        deleted_row_count = 0
+        for task in self.sheet_origin.iter_rows(
+                min_row=self.START_ROW,
+                max_row=self.sheet_origin.max_row,
+                values_only=True):
+            if task[self.COMMENT] is None:
+                self.sheet.append(task)
 
-                moved_row_count += 1
             else:
-                for word in regulars.DUPLICATES:
-                    if str(self.sheet_origin[task][self.COMMENT].value).lower().find(word) == -1:
-                        self.sheet.append(self.sheet_origin.iter_rows(min_row=task, max_row=task, values_only=True))
-                        moved_row_count += 1
-        self.wb.save(self.PATH)
-        print(f'Удалено {self.sheet_origin.max_row - moved_row_count - 1} дублей')
+                comment = str(task[self.COMMENT]).lower()
 
-        # ws1.append(row) for row in ws2.iter_rows(min_row=2, max_row=2, values_only=True)
+                duplicates_flag = False
+                for word in regulars.DUPLICATES:
+                    if comment.find(word) >= 0:
+                        duplicates_flag = True
+                        break
+
+                if duplicates_flag:
+                    deleted_row_count += 1
+                    continue
+
+                self.sheet.append(task)
+
+        self.wb.save(self.path)
+        print(f'Удалено {deleted_row_count} дублей')
+
 
     def show_tasks(self, task_quantity=all, date_range_min='2020-01-01', date_range_max='2100-01-01'):
         # Определяем нужное кол-во тасков

@@ -1,10 +1,13 @@
+import datetime
+import time
+
 from Service.OverportAnalizer import OverportAnalizer
 
 # print(sheet.max_row)
 
 
-overport = OverportAnalizer()
-print("Processing...")
+# overport1 = OverportAnalizer('ads_journal.xlsx')
+# print(bool(-1))
 
 # Считает кол-во заявок по ЖК.
 # count = 0
@@ -19,3 +22,7 @@ print("Processing...")
 
 
 # overport.show_tasks(100)
+
+
+overport = OverportAnalizer('ads_journal.xlsx')
+overport.remove_duplicates()

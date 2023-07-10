@@ -44,7 +44,7 @@ class OverportAnalizer:
                 self.sheet.append(task)
             else:
                 dublicate_flag = False
-                for word in regular.DUPLICATES:
+                for word in regulars.DUPLICATES:
                     if str(task[self.COMMENT].lower()).find(word) >= 0:
                         dublicate_flag = True
                         break

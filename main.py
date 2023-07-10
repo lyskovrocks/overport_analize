@@ -3,8 +3,7 @@ from Service.OverportAnalizer import OverportAnalizer
 
 overport = OverportAnalizer()
 
-# overport.remove_duplicates()
-# print(Service.regulars.RESIDENTIAL_COMPLEX)
+overport.remove_duplicates()
 
 overport.show_all_task_by_objects()
 

@@ -1,10 +1,37 @@
+import Service.regulars
 from Service.OverportAnalizer import OverportAnalizer
 
-# print(sheet.max_row)
-
-
 overport = OverportAnalizer()
-print("Processing...")
+
+# overport.remove_duplicates()
+# print(Service.regulars.RESIDENTIAL_COMPLEX)
+
+overport.show_all_task_by_objects()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # Считает кол-во заявок по ЖК.
 # count = 0

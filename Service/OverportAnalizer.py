@@ -1,3 +1,4 @@
+import logging
 from types import NoneType
 
 import shutil
@@ -6,10 +7,12 @@ from colorama import Fore
 from openpyxl.workbook import Workbook
 from openpyxl.worksheet.worksheet import Worksheet
 from Service import regulars
+from datetime import datetime
 
 
 class OverportAnalizer:
     PATH = 'input_data/ads_journal.xlsx'
+    OUTPUT_PATH = f'output_data/Заявки Мурино ({datetime.now().date()}).xlsx'
 
     DATE = 3
     ADDRESS = 4
@@ -20,7 +23,7 @@ class OverportAnalizer:
     SHEET_NAME = 'Without_Duplicates'
     ORIGINAL_SHEET_NAME = 'Лист 1'
 
-    START_ROW = 2
+    START_ROW = 1
 
     def __init__(self):
 
@@ -71,38 +74,51 @@ class OverportAnalizer:
                       f"{self.sheet[row][self.TASK].value}"
                       f"{self.sheet[row][self.COMMENT].value}")
 
-    # def show_redcom_tasks(self):
-    #     ...
-    #
-    #
-    # def show_reaction_time(self):
-    #     ...
-    #     # mix, max, middle
-    #
-    def show_all_task_by_objects(self):
-        residential_task_count = {}
-        for task in self.sheet_origin.iter_rows(min_row=self.START_ROW,
-                                                max_row=5000,
-                                                values_only=True):
-            find_adress_flag = False
-            for jk in regulars.RESIDENTIAL_COMPLEX:
-                if find_adress_flag == True:
-                    break
-                else:
-                    for adress in regulars.RESIDENTIAL_COMPLEX[jk]:
-                        if str(task[self.ADDRESS]).find(adress) >= 0:
-                            find_adress_flag = True
-                            if jk in residential_task_count:
-                                residential_task_count[jk] += 1
-                                break
-                            else:
-                                residential_task_count[jk] = 1
-                                break
+    def show_redcom_tasks(self):
+        redcom_wb = Workbook()
+        redcom_sheet: Worksheet = redcom_wb.active
 
-        print(residential_task_count)
-        summ = 0
-        for v in residential_task_count.values():
-            summ = summ + v
-        print(summ)
-        print(self.sheet_origin.max_row - 1)
-        print(len(residential_task_count))
+        for task in self.sheet_origin.iter_rows(min_row=self.START_ROW,
+                                                max_row=self.sheet_origin.max_row,
+                                                values_only=True):
+            for jk in regulars.JK_ADDRESS:
+                if jk == 'Авиатор' or jk == 'Урбанист':
+                    for address in regulars.JK_ADDRESS[jk]:
+                        if str(task[self.ADDRESS]).find(address) >= 0:
+                            redcom_sheet.append(task)
+        redcom_wb.save(self.OUTPUT_PATH)
+
+
+#
+#
+# def show_reaction_time(self):
+#     ...
+#     # mix, max, middle
+#
+def show_all_task_by_objects(self):
+    residential_task_count = {}
+    for task in self.sheet_origin.iter_rows(min_row=self.START_ROW,
+                                            max_row=5001,
+                                            values_only=True):
+        find_adress_flag = False
+        for jk in regulars.JK_ADDRESS:
+            if find_adress_flag == True:
+                break
+            else:
+                for adress in regulars.JK_ADDRESS[jk]:
+                    if str(task[self.ADDRESS]).find(adress) >= 0:
+                        find_adress_flag = True
+                        if jk in residential_task_count:
+                            residential_task_count[jk] += 1
+                            break
+                        else:
+                            residential_task_count[jk] = 1
+                            break
+
+    print(residential_task_count)
+    summ = 0
+    for v in residential_task_count.values():
+        summ = summ + v
+    print(summ)
+    print(self.sheet_origin.max_row - 1)
+    print(len(residential_task_count))

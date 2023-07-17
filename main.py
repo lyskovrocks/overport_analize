@@ -3,9 +3,11 @@ from Service.OverportAnalizer import OverportAnalizer
 
 overport = OverportAnalizer()
 
-overport.remove_duplicates()
+# overport.remove_duplicates()
+#
+# overport.show_all_task_by_objects()
 
-overport.show_all_task_by_objects()
+overport.show_redcom_tasks()
 
 
 
